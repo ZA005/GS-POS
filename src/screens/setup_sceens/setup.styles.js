@@ -55,6 +55,14 @@ const styles = StyleSheet.create({
     },
     input: {
         width: '100%',
+        marginBottom: 10,
+
+    },
+    errorText: {
+        width: '100%',
+        textAlign: "left",
+        color: 'red',
+        fontSize: 12,
         marginBottom: 16,
     },
 });

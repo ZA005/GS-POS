@@ -5,7 +5,7 @@ import styles from './setup.styles';
 
 const SetupComplete = ({ navigation }) => {
     const handleProceed = () => {
-        navigation.navigate('setup2'); // Adjust navigation as needed
+        navigation.navigate('Dashboard'); // Adjust navigation as needed
     };
 
     return (

@@ -1,9 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Image } from 'react-native';
 import { Text, Button } from 'react-native-paper';
 import styles from './setup.styles';
+import { runDatabase } from '../../services/Database';
 
 const Setup1 = ({ navigation }) => {
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        const runDB = async () => {
+            try {
+                await runDatabase();
+                setLoading(false); // Database opened successfully
+            } catch (e) {
+                setLoading(false); // Database failed to open
+                setError('Error initializing the database. Please try again.');
+                console.error(e);
+            }
+        };
+
+        runDB();
+    }, []);
+
     const handleProceed = () => {
         navigation.navigate('Setup2');
     };

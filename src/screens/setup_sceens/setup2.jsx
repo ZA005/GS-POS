@@ -2,16 +2,43 @@ import React, { useState } from 'react';
 import { View, Image } from 'react-native';
 import { Text, Button, TextInput } from 'react-native-paper';
 import styles from './setup.styles';
+import { getAdmin } from '../../services/UserService';
 
 const Setup2 = ({ navigation }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState({ username: '', password: '' });
 
-    const handleProceed = () => {
-        if (username && password) {
-            navigation.navigate('Setup3');
+    const handleProceed = async () => {
+        let valid = true;
+        const newError = { username: '', password: '' };
+
+        if (!username) {
+            newError.username = 'Username is required';
+            valid = false;
+        }
+        if (!password) {
+            newError.password = 'Password is required';
+            valid = false;
+        }
+
+        if (valid) {
+            try {
+
+                const adminAccount = await getAdmin(username, password);
+                if (adminAccount) {
+                    navigation.navigate('Setup3');
+                } else {
+                    newError.username = 'Invalid username or password';
+                    setError(newError);
+                }
+            } catch (e) {
+                newError.form = 'Error verifying credentials. Please try again.';
+                setError(newError);
+                console.error(e);
+            }
         } else {
-            console.log('Please fill in all fields');
+            setError(newError);
         }
     };
 
@@ -31,14 +58,21 @@ const Setup2 = ({ navigation }) => {
                 Password to proceed.
             </Text>
 
+
+            {/* Username Input */}
             <TextInput
                 label="Username"
                 value={username}
                 onChangeText={setUsername}
                 style={styles.input}
                 mode="outlined"
+                error={!!error.username}
             />
+            {error.username ? (
+                <Text style={styles.errorText}>{error.username}</Text>
+            ) : null}
 
+            {/* Password Input */}
             <TextInput
                 label="Password"
                 value={password}
@@ -46,7 +80,11 @@ const Setup2 = ({ navigation }) => {
                 style={styles.input}
                 mode="outlined"
                 secureTextEntry
+                error={!!error.password}
             />
+            {error.password ? (
+                <Text style={styles.errorText}>{error.password}</Text>
+            ) : null}
 
             {/* Proceed Button */}
             <Button
