@@ -5,7 +5,7 @@ import styles from './setup.styles';
 
 const SetupComplete = ({ navigation }) => {
     const handleProceed = () => {
-        navigation.navigate('Dashboard'); // Adjust navigation as needed
+        navigation.navigate('Dashboard');
     };
 
     return (
@@ -13,7 +13,7 @@ const SetupComplete = ({ navigation }) => {
             <View style={styles.content}>
                 {/* Fire Icon */}
                 <Image
-                    source={require('../../../assets/fire-icon.png')} // Replace with your fire icon
+                    source={require('../../../assets/fire-icon.png')}
                     style={styles.image}
                 />
 

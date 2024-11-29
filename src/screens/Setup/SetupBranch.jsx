@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { View, Image, Alert } from 'react-native';
 import { Text, Button, TextInput } from 'react-native-paper';
+import { addBranch } from '../../services/BranchService';
 import styles from './setup.styles';
 
 const SetupBranch = ({ navigation }) => {
+    const [branchID, setID] = useState('');
     const [branchName, setName] = useState('');
     const [branchAddress, setAddress] = useState('');
     const [error, setError] = useState({ branchName: '', branchAddress: '' });
@@ -11,7 +13,12 @@ const SetupBranch = ({ navigation }) => {
     const handleProceed = () => {
         let valid = true;
 
-        const newError = { branchName: '', branchAddress: '' };
+        const newError = { branchID: '', branchName: '', branchAddress: '' };
+
+        if (!branchID) {
+            newError.branchID = 'Branch ID is required!';
+            valid = false;
+        }
 
         if (!branchName) {
             newError.branchName = 'Branch Name is required!';
@@ -37,7 +44,7 @@ const SetupBranch = ({ navigation }) => {
                     {
                         text: "OK",
                         onPress: () => {
-                            // Navigate to the next screen
+                            insertBranch();
                             navigation.navigate('SetupComplete');
                         }
                     }
@@ -48,6 +55,9 @@ const SetupBranch = ({ navigation }) => {
         }
     };
 
+    const insertBranch = async () => {
+        await addBranch(branchID, branchName, branchAddress);
+    }
     return (
         <View style={styles.container}>
             <Image source={require('../../../assets/fire-icon.png')} style={styles.image} />
@@ -55,6 +65,18 @@ const SetupBranch = ({ navigation }) => {
             <Text style={styles.description}>
                 Please enter <Text style={styles.bold}>Branch</Text> Name and Address to proceed.
             </Text>
+
+            <TextInput
+                label="Branch ID"
+                value={branchID}
+                onChangeText={setID}
+                style={styles.input}
+                mode="outlined"
+                error={!!error.branchID}
+            />
+            {error.branchID ? (
+                <Text style={styles.errorText}>{error.branchID}</Text>
+            ) : null}
 
             <TextInput
                 label="Branch Name"
