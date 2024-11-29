@@ -38,9 +38,32 @@ const styles = StyleSheet.create({
         width: '100%',
         marginBottom: 10,
     },
+    deactivateButton: {
+        borderRadius: 5,
+        marginBottom: 10,
+    },
     cancelButton: {
         width: '100%',
         borderRadius: 5,
+    },
+    errorText: {
+        color: 'red',
+        fontSize: 12,
+    },
+
+    dropdown: {
+        // backgroundColor: '#f1f1f1',
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        marginVertical: 10,
+    },
+    dropdownBox: {
+        // backgroundColor: '#fff',
+        borderColor: '#ccc',
+    },
+    dropdownContainer: {
+        marginBottom: 15,
     },
 });
 
