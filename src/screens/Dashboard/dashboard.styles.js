@@ -24,6 +24,19 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         backgroundColor: '#FDF6E4',
     },
+    loadingText: {
+        fontSize: 16,
+        color: '#00224E',
+        textAlign: 'center',
+        marginVertical: 16,
+    },
+
+    noDataText: {
+        fontSize: 16,
+        color: '#00224E',
+        textAlign: 'center',
+        marginVertical: 16,
+    },
 });
 
 export default styles;
