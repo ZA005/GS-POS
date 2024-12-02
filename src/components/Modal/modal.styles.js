@@ -22,10 +22,9 @@ const styles = StyleSheet.create({
         color: '#071952',
     },
     input: {
-        borderWidth: 1,
-        borderColor: '#ccc',
+        backgroundColor: 'transparent',
         borderRadius: 5,
-        padding: 10,
+        // padding: 10,
         marginBottom: 15,
         fontSize: 16,
     },
@@ -52,18 +51,16 @@ const styles = StyleSheet.create({
     },
 
     dropdown: {
-        // backgroundColor: '#f1f1f1',
         borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 5,
-        marginVertical: 10,
+        borderColor: 'gray',
+        borderRadius: 3,
+        marginBottom: 10,
     },
     dropdownBox: {
-        // backgroundColor: '#fff',
         borderColor: '#ccc',
     },
     dropdownContainer: {
-        marginBottom: 15,
+        // marginBottom: 15,
     },
 });
 

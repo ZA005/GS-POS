@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Modal, View, TextInput, Alert, Text } from 'react-native';
+import { Modal, View, Alert, Text } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { Button } from 'react-native-paper';
+import { Button, TextInput } from 'react-native-paper';
 import styles from './modal.styles';
 
 const ModalForm = ({
@@ -10,7 +10,7 @@ const ModalForm = ({
     title,
     fields,
     onSubmit,
-    submitButtonLabel = 'Submit',
+    buttonType = 'submit',
     secondaryButtonLabel,
     onSecondaryAction,
     action,
@@ -36,19 +36,27 @@ const ModalForm = ({
     const handleFormSubmit = () => {
         if (!validateFields()) return;
 
-        Alert.alert(
-            "Confirm Submission",
-            `Are you sure you want to ${action} this ${entity}?`,
-            [
-                { text: "Cancel", style: "cancel" },
-                {
-                    text: "OK",
-                    onPress: () => {
-                        onSubmit();
+        if (buttonType === 'submit') {
+            // If buttonType is 'submit', show confirmation dialog
+            Alert.alert(
+                "Confirm Action",
+                `Are you sure you want to ${action} this ${entity}?`,
+                [
+                    { text: "Cancel", style: "cancel" },
+                    {
+                        text: "OK",
+                        onPress: () => {
+                            onSubmit();
+                        },
                     },
-                },
-            ]
-        );
+                ]
+            );
+        } else if (buttonType === 'login') {
+            if (!validateFields()) {
+                return;
+            }
+            onSubmit();
+        }
     };
 
     return (
@@ -91,9 +99,10 @@ const ModalForm = ({
                                         <TextInput
                                             style={[
                                                 styles.input,
-                                                // Apply gray background if the field is not editable
                                                 field.editable === false && { color: 'gray' }
                                             ]}
+                                            mode={field.mode}
+                                            label={field.label}
                                             placeholder={field.placeholder}
                                             value={field.value}
                                             onChangeText={(text) => {
@@ -107,6 +116,7 @@ const ModalForm = ({
                                             secureTextEntry={field.secureTextEntry}
                                             keyboardType={field.keyboardType || 'default'}
                                             editable={field.editable !== undefined ? field.editable : true}
+                                            disabled={field.disabled || false}
 
                                         />
                                         {errors[index] && (
@@ -123,7 +133,7 @@ const ModalForm = ({
                                 onPress={handleFormSubmit}
                                 style={styles.submitButton}
                             >
-                                {submitButtonLabel}
+                                {buttonType === 'submit' ? 'Submit' : 'Login'}
                             </Button>
 
                             {secondaryButtonLabel && onSecondaryAction && (
