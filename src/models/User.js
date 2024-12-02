@@ -9,7 +9,7 @@ export default class User {
     }
 
     // GETTERS
-    getUserId() {
+    getId() {
         return this._user_id;
     }
 
@@ -34,7 +34,7 @@ export default class User {
     }
 
     // SETTERS
-    setUserId(userId) {
+    setId(userId) {
         this._user_id = userId;
     }
 
