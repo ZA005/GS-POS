@@ -9,11 +9,12 @@ const styles = StyleSheet.create({
     },
     content: {
         display: 'flex',
-        flexDirection: 'row',
         justifyContent: 'space-between',
     },
     cardSection: {
-        marginBottom: 8,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     label: {
         fontSize: 12,
