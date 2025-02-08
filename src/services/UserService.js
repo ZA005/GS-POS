@@ -24,6 +24,7 @@ export const getAdmin = async (username, password) => {
     }
 }
 
+// fetching of only one user
 export const getUser = async (username, password, userType) => {
     let db;
     try {
@@ -130,6 +131,14 @@ export const addUser = async (user) => {
     const db = await openDatabase();
 
     try {
+        const result = await db.getFirstAsync(
+            'SELECT COUNT(*) AS count FROM users WHERE username = ?, fullname = ?',
+            [user.getUsername(), user.getFullname()]
+        );
+        if (result.count > 0) {
+            console.log("User already exists!");
+            return false
+        }
         await db.runAsync(
             'INSERT INTO users (username,password,fullname, user_type, is_active) VALUES (?,?,?,?,1)',
             [user.getUsername(), user.getPassword(), user.getFullname(), user.getUserType()]
@@ -160,6 +169,7 @@ export const updateUser = async (user) => {
     }
 }
 
+// activating and deactivating of user
 export const switchStatus = async (user) => {
     const db = await openDatabase();
     const deactivateStatement = 'UPDATE users SET is_active = 0 WHERE user_id = ?'

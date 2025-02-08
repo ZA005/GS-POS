@@ -60,6 +60,17 @@ export const fetchAllProducts = async () => {
 export const addProduct = async (product) => {
     const db = await openDatabase();
     try {
+        // check for duplication
+        const result = await db.getFirstAsync(
+            'SELECT COUNT(*) AS count FROM products WHERE description = ?',
+            [product.getDescription()]
+        );
+
+        if (result.count > 0) {
+            console.log("Product already exists with product_id:", product._product_id);
+            return false;
+        }
+
         await db.runAsync(
             'INSERT INTO products (product_id ,description, tank_no, current_price) VALUES (?, ?, ?, ?)',
             [product._product_id, product.getDescription(), product.getTankNo(), product.getCurrentPrice()]
