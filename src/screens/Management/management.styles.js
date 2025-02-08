@@ -72,6 +72,8 @@ const styles = StyleSheet.create({
     userItem: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        // backgroundColor: 'red',
+        paddingBottom: '10'
     },
     userName: {
         fontWeight: 'bold',
@@ -132,6 +134,20 @@ const styles = StyleSheet.create({
         marginVertical: 16,
     },
 
+    // Customer Managment
+
+    customerName: {
+        fontWeight: 'bold',
+        fontSize: 20,
+        color: '#00224E'
+    },
+
+    customerDetailsContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    ///////////////////////////////////////
     footer: {
         // borderTopColor: 'gray',
         // borderTopWidth: 1,

@@ -12,8 +12,7 @@ const UserManagement = ({ navigation }) => {
     const [modalType, setModalType] = useState(null);
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [viewInactive, setViewInactive] = useState(false); // State for toggling active/inactive users
-
+    const [viewInactive, setViewInactive] = useState(false);
     const loadActiveUsers = async () => {
         setLoading(true);
         try {

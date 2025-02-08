@@ -11,7 +11,7 @@ import Dashboard from '../screens/Dashboard/Dashboard';
 import AdminManagement from '../screens/Management/AdminManagement';
 import UserManagement from '../screens/Management/UserManagement';
 import ProductManagement from '../screens/Management/ProductManagement';
-
+import CustomerManagement from '../screens/Management/CustomerManagement';
 import { fetchBranch } from '../services/Branch/BranchService';
 
 const Stack = createStackNavigator();
@@ -62,6 +62,7 @@ const Navigation = () => {
                 <Stack.Screen name="AdminManagement" component={AdminManagement} />
                 <Stack.Screen name="UserManagement" component={UserManagement} />
                 <Stack.Screen name="ProductManagement" component={ProductManagement} />
+                <Stack.Screen name="CustomerManagement" component={CustomerManagement} />
             </Stack.Navigator>
         </NavigationContainer>
     );
