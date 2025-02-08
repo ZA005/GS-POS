@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Image } from 'react-native';
+import { View, Image, BackHandler, Alert } from 'react-native';
 import { Text, Button } from 'react-native-paper';
 import styles from './setup.styles';
 import { runDatabase } from '../../services/Database';
@@ -21,11 +21,31 @@ const GetStarted = ({ navigation }) => {
         };
 
         runDB();
+
+        const backAction = () => {
+            Alert.alert(
+                "Exit App",
+                "Are you sure you want to quit the app?",
+                [
+                    { text: "No", style: "cancel" },
+                    { text: "Yes", onPress: () => BackHandler.exitApp() }
+                ]
+            );
+            return true;
+        };
+
+        const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
+
+        return () => backHandler.remove();
     }, []);
 
     const handleProceed = () => {
-        navigation.navigate('AdminLogin');
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'AdminLogin' }],
+        });
     };
+
 
     return (
         <View style={styles.container}>

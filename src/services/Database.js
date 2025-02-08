@@ -7,7 +7,7 @@ export const openDatabase = async () => {
         const db = await SQLite.openDatabaseAsync(dbName, { useNewConnection: true });
         const [{ user_version }] = await db.getAllAsync('PRAGMA user_version;');
 
-        if (user_version < 1) {
+        if (user_version < 2) {
             await db.execAsync(`
                 PRAGMA journal_mode = WAL;
                 PRAGMA foreign_keys = ON;
@@ -34,11 +34,35 @@ export const openDatabase = async () => {
                     address TEXT NOT NULL
                 );
 
+                CREATE TABLE IF NOT EXISTS customers(
+                    customer_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    fullname TEXT NOT NULL,
+                    home_address TEXT NOT NULL,
+                    mobile_no TEXT NOT NULL CHECK(LENGTH(mobile_no) = 11)
+                );
+
+                CREATE TABLE IF NOT EXISTS transactions(
+                    transaction_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    start_date TEXT NOT NULL,
+                    start_time TEXT NOT NULL,
+                    cut_off_date TEXT NOT NULL,
+                    cut_off_time TEXT NOT NULL
+                );
+
+                CREATE TABLE IF NOT EXISTS transaction_prices(
+                    tp_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    transaction_id INTEGER NOT NULL,
+                    product_id CHAR(2) NOT NULL,
+                    price REAL NOT NULL,
+                    FOREIGN KEY(transaction_id) REFERENCES transactions(transaction_id),
+                    FOREIGN KEY(product_id) REFERENCES products(product_id)
+                );
+
                 INSERT INTO users (username,password,fullname,user_type,is_active)
                 SELECT 'admin','admin123','Administrator','0','1'
                 WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'admin');
 
-                PRAGMA user_version = 1;
+                PRAGMA user_version = 2;
             `);
         }
         return db;

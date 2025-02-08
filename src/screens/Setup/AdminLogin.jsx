@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Image, BackHandler, Alert } from 'react-native';
 import { Text, Button, TextInput } from 'react-native-paper';
 import styles from './setup.styles';
 import { getAdmin } from '../../services/UserService';
@@ -8,6 +8,24 @@ const AdminLogin = ({ navigation }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState({ username: '', password: '' });
+
+    useEffect(() => {
+        const backAction = () => {
+            Alert.alert(
+                "Exit App",
+                "Are you sure you want to quit the app?",
+                [
+                    { text: "No", style: "cancel" },
+                    { text: "Yes", onPress: () => BackHandler.exitApp() }
+                ]
+            );
+            return true;
+        };
+
+        const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
+
+        return () => backHandler.remove();
+    })
 
     const handleProceed = async () => {
         let valid = true;
@@ -27,7 +45,11 @@ const AdminLogin = ({ navigation }) => {
 
                 const adminAccount = await getAdmin(username, password);
                 if (adminAccount) {
-                    navigation.navigate('SetupBranch');
+                    clearFields();
+                    navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'SetupBranch' }],
+                    });
                 } else {
                     newError.auth = 'Invalid username or password';
                     valid = false;
@@ -42,6 +64,11 @@ const AdminLogin = ({ navigation }) => {
             setError(newError);
         }
     };
+
+    const clearFields = () => {
+        setUsername('');
+        setPassword('');
+    }
 
     return (
         <View style={styles.container}>
