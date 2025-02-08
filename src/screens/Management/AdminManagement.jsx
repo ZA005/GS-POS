@@ -46,7 +46,7 @@ const AdminManagement = ({ navigation }) => {
                 <TouchableOpacity style={styles.option} onPress={() => handleNavigation('UserManagement')}>
                     <View style={styles.iconTextContainer}>
                         <IconButton
-                            icon="account"
+                            icon="shield-account"
                             size={30}
                             iconColor="#00224E" // Navy color
                         />
@@ -64,6 +64,19 @@ const AdminManagement = ({ navigation }) => {
                             iconColor="#00224E" // Navy color
                         />
                         <Text style={styles.optionText}>Product Management</Text>
+                    </View>
+                </TouchableOpacity>
+
+                <Divider style={styles.divider} />
+
+                <TouchableOpacity style={styles.option} onPress={() => handleNavigation('CustomerManagement')}>
+                    <View style={styles.iconTextContainer}>
+                        <IconButton
+                            icon="account-cash"
+                            size={30}
+                            iconColor="#00224E" // Navy color
+                        />
+                        <Text style={styles.optionText}>Customer Management</Text>
                     </View>
                 </TouchableOpacity>
             </ScrollView>

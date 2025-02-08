@@ -1,81 +1,76 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ModalForm from '../ModalForm';
-import { getUser } from '../../../services/User/UserService'
+import { getUser } from '../../../services/User/UserService';
 import { Alert } from 'react-native';
 
 const LoginModal = ({ visible, onClose, type }) => {
-    const [userType, setUserType] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [userType, setUserType] = useState('');
+
+    useEffect(() => {
+        if (typeof type === 'string') {
+            setUserType(type);
+        }
+    }, [type, visible]);
 
     const convertStringTypeToInt = (type) => {
         switch (type) {
-            case ('Admin'):
+            case 'Admin':
                 return 0;
-            case ('Checker'):
+            case 'Checker':
                 return 1;
-            case ('Cashier'):
+            case 'Cashier':
                 return 2;
             default:
-                return null
+                return null;
         }
-    }
+    };
+
     const handleSubmit = async () => {
-        if (type === userType || userType === 'Admin') {
-            const user = await getUser(username, password, convertStringTypeToInt(type));
-            if (user) {
-                console.log(username, password, type)
-                clearFields()
-                onClose(true)
-            } else {
-                Alert.alert(
-                    'Login Failed',
-                    'The username or password you entered is incorrect. Please double-check your credentials and try again.'
-                );
-                clearFields()
-            }
+        if (!username.trim() || !password.trim()) {
+            Alert.alert('Error', 'Username and Password are required.');
+            return;
+        }
+
+        const user = await getUser(username, password, convertStringTypeToInt(userType));
+
+        if (user) {
+            console.log(username, password, userType);
+            clearFields();
+            onClose(true);
         } else {
             Alert.alert(
-                "Access Restricted",
-                `This section is accessible only to ${type} accounts. Please ensure you are logging in with the correct credentials.`,
-                [
-                    {
-                        text: "OK",
-                        onPress: () => {
-                            clearFields(); // Clear the fields when the alert is dismissed
-                        },
-                    },
-                ]
+                'Login Failed',
+                'Incorrect username or password. Please try again.'
             );
-
+            clearFields();
         }
     };
 
     const clearFields = () => {
-        setUserType('')
-        setUsername('')
-        setPassword('')
-    }
+        setUsername('');
+        setPassword('');
+    };
 
     const handleCancel = () => {
-        clearFields()
-        onClose(false)
-    }
+        clearFields();
+        onClose(false);
+    };
+
     const fields = [
         {
-            placeholder: 'User Type',
-            value: userType,
-            onChangeText: setUserType,
-            isDropdown: true,
-            options: ['Admin', 'Checker', 'Cashier'],
-            validation: (value) => !value.trim() ? "User Type is required" : null
+            mode: 'outlined',
+            label: 'User Type',
+            value: userType || '',
+            editable: false,
         },
         {
             mode: 'outlined',
             label: 'Username',
             value: username,
             onChangeText: setUsername,
-            validation: (value) => !value.trim() ? "Username is required" : null
+            validation: (value) => (!value.trim() ? 'Username is required' : null),
         },
         {
             mode: 'outlined',
@@ -83,9 +78,10 @@ const LoginModal = ({ visible, onClose, type }) => {
             value: password,
             onChangeText: setPassword,
             secureTextEntry: true,
-            validation: (value) => !value.trim() ? "Password is required" : null
+            validation: (value) => (!value.trim() ? 'Password is required' : null),
         },
     ];
+
     return (
         <ModalForm
             visible={visible}
@@ -95,7 +91,6 @@ const LoginModal = ({ visible, onClose, type }) => {
             onSubmit={handleSubmit}
             buttonType="login"
         />
-
     );
 };
 
