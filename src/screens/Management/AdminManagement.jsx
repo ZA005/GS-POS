@@ -2,7 +2,7 @@ import React from 'react';
 import { View, TouchableOpacity, ScrollView } from 'react-native';
 import { Text, IconButton, Divider } from 'react-native-paper';
 import styles from './management.styles';
-import BranchUpdate from '../../components/BranchUpdateModal';
+import BranchUpdate from '../../components/Modal/Branch/BranchUpdateModal';
 
 const AdminManagement = ({ navigation }) => {
     const [isBranchModalVisible, setBranchModalVisible] = React.useState(false);

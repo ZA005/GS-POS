@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { View, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Text, Divider, IconButton } from 'react-native-paper';
-import LoginModal from '../../components/LoginModal';
+import LoginModal from '../../components/Modal/Login/LoginModal';
 import useManagementNavigation from '../../hooks/useManagementNavigation';
 import ManagementOption from '../../components/ManagementOption';
 import styles from './management.styles';

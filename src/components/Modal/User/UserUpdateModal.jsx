@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Alert } from 'react-native';
-import ModalForm from './Modal/ModalForm';
-import CustomAlert from './Alert/CustomAlert';
-import User from '../models/User';
-import { getUserByID, updateUser, switchStatus } from '../services/User/UserService';
+import ModalForm from '../ModalForm';
+import CustomAlert from '../../Alert/CustomAlert';
+import User from '../../../models/User';
+import { getUserByID, updateUser, switchStatus } from '../../../services/User/UserService';
 
 const UserUpdate = ({ visible, onClose, userId }) => {
     const [userData, setUserData] = useState(null);

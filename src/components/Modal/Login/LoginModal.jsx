@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import ModalForm from './Modal/ModalForm';
-import { getUser } from '../services/User/UserService'
+import ModalForm from '../ModalForm';
+import { getUser } from '../../../services/User/UserService'
 import { Alert } from 'react-native';
 
 const LoginModal = ({ visible, onClose, type }) => {
