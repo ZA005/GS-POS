@@ -1,34 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import ModalForm from './Modal/ModalForm';
-import Product from '../models/Product';
-import CustomAlert from './Alert/CustomAlert';
-import { fetchProductByID, updateProduct } from '../services/Product/ProductService';
+import React, { useState } from 'react';
+import ModalForm from '../ModalForm';
+import { addProduct } from '../../../services/Product/ProductService';
+import CustomAlert from '../../Alert/CustomAlert';
+import Product from '../../../models/Product';
 
-const ProductUpdate = ({ visible, onClose, productID }) => {
+const ProductAdd = ({ visible, onClose }) => {
+    const [productID, setProductID] = useState('');
     const [productDescription, setProductDescription] = useState('');
     const [tankNumber, setTankNumber] = useState('');
     const [currentPrice, setCurrentPrice] = useState('');
     const [alertVisible, setAlertVisible] = useState(false);
-
-    useEffect(() => {
-        const loadProduct = async () => {
-            if (productID) {
-                try {
-                    const productData = await fetchProductByID(productID);
-                    if (productData) {
-                        setProductDescription(productData.description);
-                        setTankNumber(productData.tank_no.toString());
-                        setCurrentPrice(productData.current_price.toString());
-                    }
-                } catch (error) {
-                    console.error("Error fetching product:", error);
-                }
-            }
-        };
-
-
-        loadProduct();
-    }, [productID]);
 
     const formatPrice = (price) => {
         const numericPrice = parseFloat(price);
@@ -38,17 +19,25 @@ const ProductUpdate = ({ visible, onClose, productID }) => {
     const handleSubmit = async () => {
         try {
             const formattedPrice = formatPrice(currentPrice);
-            const updatedProduct = new Product(productID, productDescription, tankNumber, formattedPrice);
-            await updateProduct(updatedProduct);
+            // console.log('PRICE', formattedPrice);
+            const newProduct = new Product(productID, productDescription, tankNumber, formattedPrice);
+            await addProduct(newProduct);
+            // console.log("Product added:", { productDescription, tankNumber, currentPrice });
+
 
             setProductDescription('');
             setTankNumber('');
             setCurrentPrice('');
 
-
             setAlertVisible(true);
-        } catch (e) {
-            console.error("Error updating product:", e);
+        } catch (error) {
+            console.error("Error adding product:", error);
+        }
+    };
+
+    const handleProductIDChange = (text) => {
+        if (text.length <= 2) {
+            setProductID(text);
         }
     };
 
@@ -62,8 +51,8 @@ const ProductUpdate = ({ visible, onClose, productID }) => {
             mode: 'outlined',
             label: 'Product ID',
             value: productID,
-            disabled: true
-
+            onChangeText: handleProductIDChange,
+            validation: (value) => !value.trim() ? "ProductID is required" : null
         },
         {
             mode: 'outlined',
@@ -76,12 +65,7 @@ const ProductUpdate = ({ visible, onClose, productID }) => {
             mode: 'outlined',
             label: 'Tank Number',
             value: tankNumber,
-            onChangeText: (text) => {
-                // Ensure only integers are inputted
-                if (/^\d*$/.test(text)) {
-                    setTankNumber(Number(text));
-                }
-            },
+            onChangeText: setTankNumber,
             keyboardType: 'numeric',
             validation: (value) => !value.trim() ? "Tank Number is required" : null
         },
@@ -90,7 +74,6 @@ const ProductUpdate = ({ visible, onClose, productID }) => {
             label: 'Current Price',
             value: currentPrice,
             onChangeText: (text) => {
-                // Ensure that the text entered is a valid number
                 if (/^\d*\.?\d*$/.test(text)) {
                     setCurrentPrice(text);
                 }
@@ -105,25 +88,23 @@ const ProductUpdate = ({ visible, onClose, productID }) => {
             <ModalForm
                 visible={visible}
                 onClose={onClose}
-                title="Update Product"
+                title="Add New Product"
                 fields={fields}
                 onSubmit={handleSubmit}
-                submitButtonLabel="Update"
-                secondaryButtonLabel="Deactivate"
-                onSecondaryAction={() => console.log("Product deactivated")}
-                action="update"
+                buttonType='submit'
+                action="add"
                 entity="product"
             />
 
             <CustomAlert
                 visible={alertVisible}
                 onConfirm={handleAlertConfirm}
-                action="update"
-                entity="Product"
+                action="add"
+                entity="product"
             />
         </>
 
     );
 };
 
-export default ProductUpdate;
+export default ProductAdd;

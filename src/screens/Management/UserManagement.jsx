@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, ScrollView, TextInput } from 'react-native';
 import { Text, IconButton, Divider } from 'react-native-paper';
-import UserAdd from '../../components/UserAddModal';
-import UserUpdate from '../../components/UserUpdateModal';
+import UserAdd from '../../components/Modal/User/UserAddModal';
+import UserUpdate from '../../components/Modal/User/UserUpdateModal';
 import { fetchAllActiveUser, fetchAllInActiveUser } from '../../services/User/UserService';
 import styles from './management.styles';
 

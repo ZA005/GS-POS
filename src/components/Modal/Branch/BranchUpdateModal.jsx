@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import ModalForm from './Modal/ModalForm';
-import Branch from '../models/Branch';
-import { fetchBranch, updateBranch } from '../services/Branch/BranchService';
-import CustomAlert from './Alert/CustomAlert';
+import ModalForm from '../ModalForm';
+import Branch from '../../../models/Branch';
+import { fetchBranch, updateBranch } from '../../../services/Branch/BranchService';
+import CustomAlert from '../../Alert/CustomAlert';
 
 const BranchUpdate = ({ visible, onClose }) => {
     const [branchID, setBranchID] = useState('');
