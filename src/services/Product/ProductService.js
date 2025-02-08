@@ -1,5 +1,5 @@
-import { closeDatabase, openDatabase } from "./Database";
-import Product from "../models/Product";
+import { closeDatabase, openDatabase } from "../Database";
+import Product from "../../models/Product";
 
 export const fetchAllProducts = async () => {
     const db = await openDatabase()
