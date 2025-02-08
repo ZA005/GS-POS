@@ -4,7 +4,6 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         padding: 16,
-        backgroundColor: '#FDF6E4',
     },
     center: {
         flex: 1,
@@ -22,7 +21,7 @@ const styles = StyleSheet.create({
     titleContainer: {
         paddingHorizontal: 16,
         paddingVertical: 10,
-        backgroundColor: '#FDF6E4',
+        // backgroundColor: '#FDF6E4',
     },
     loadingText: {
         fontSize: 16,
