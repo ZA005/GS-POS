@@ -3,7 +3,7 @@ import { View, ScrollView, TextInput } from 'react-native';
 import { Text, IconButton, Divider } from 'react-native-paper';
 import UserAdd from '../../components/UserAddModal';
 import UserUpdate from '../../components/UserUpdateModal';
-import { fetchAllActiveUser, fetchAllInActiveUser } from '../../services/UserService';
+import { fetchAllActiveUser, fetchAllInActiveUser } from '../../services/User/UserService';
 import styles from './management.styles';
 
 const UserManagement = ({ navigation }) => {

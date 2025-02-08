@@ -12,7 +12,7 @@ import AdminManagement from '../screens/Management/AdminManagement';
 import UserManagement from '../screens/Management/UserManagement';
 import ProductManagement from '../screens/Management/ProductManagement';
 
-import { fetchBranch } from '../services/BranchService';
+import { fetchBranch } from '../services/Branch/BranchService';
 
 const Stack = createStackNavigator();
 
@@ -31,14 +31,13 @@ const Navigation = () => {
                 }
             } catch (error) {
                 console.error('Error checking branch data:', error);
-                setInitialRoute('GetStarted'); // Default to GetStarted in case of error
+                setInitialRoute('GetStarted');
             }
         };
 
         checkBranchData();
     }, []);
 
-    // Wait until initialRoute is determined
     if (!initialRoute) {
         return (
             <View style={styles.loadingContainer}>

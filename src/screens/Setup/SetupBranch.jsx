@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Image, Alert, BackHandler } from 'react-native';
 import { Text, Button, TextInput } from 'react-native-paper';
-import { addBranch } from '../../services/BranchService';
+import { addBranch } from '../../services/Branch/BranchService';
 import styles from './setup.styles';
 
 const SetupBranch = ({ navigation }) => {

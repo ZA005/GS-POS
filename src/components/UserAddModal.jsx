@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ModalForm from './Modal/ModalForm';
 import CustomAlert from './Alert/CustomAlert';
-import { addUser } from '../services/UserService';
+import { addUser } from '../services/User/UserService';
 import User from '../models/User';
 
 const UserAdd = ({ visible, onClose }) => {

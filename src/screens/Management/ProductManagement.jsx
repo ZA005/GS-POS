@@ -3,7 +3,7 @@ import { View, ScrollView, TextInput } from 'react-native';
 import { Text, IconButton, Divider } from 'react-native-paper';
 import ProductUpdate from '../../components/ProductUpdateModal';
 import ProductAdd from '../../components/ProductAddModal';
-import { fetchAllProducts } from '../../services/ProductService';
+import { fetchAllProducts } from '../../services/Product/ProductService';
 import styles from './management.styles';
 
 const ProductManagement = ({ navigation }) => {

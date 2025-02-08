@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Image, BackHandler, Alert } from 'react-native';
 import { Text, Button, TextInput } from 'react-native-paper';
 import styles from './setup.styles';
-import { getAdmin } from '../../services/UserService';
+import { getAdmin } from '../../services/User/UserService';
 
 const AdminLogin = ({ navigation }) => {
     const [username, setUsername] = useState('');
