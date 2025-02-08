@@ -1,13 +1,20 @@
-const checkDuplicate = async (db, fullname, mobile_no) => {
+const checkDuplicate = async (db, customers) => {
     try {
-        const result = await db.getFirstAsync(
-            'SELECT * FROM customers WHERE fullname = ? OR mobile_no = ?',
-            [fullname, mobile_no]
+        // Fetch all existing customers at once
+        const existingCustomers = await db.getAllAsync("SELECT fullname, mobile_no FROM customers");
+
+        // Store existing customers in a Set for quick lookups
+        const existingSet = new Set(existingCustomers.map(c => `${c.fullname}-${c.mobile_no}`));
+
+        // Identify duplicates in the provided customer list
+        const duplicates = customers.filter(customer =>
+            existingSet.has(`${customer.getFullname()}-${customer.getMobileNo()}`)
         );
-        return !!result; // Returns true if duplicate exists, false otherwise
+
+        return duplicates; // Return list of duplicates (empty if none)
     } catch (error) {
-        console.error('Error checking for duplicate:', error);
-        return false;
+        console.error('Error checking for duplicates:', error);
+        return [];
     }
 };
 

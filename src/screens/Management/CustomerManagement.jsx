@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, TextInput } from 'react-native';
+import { View, ScrollView, TextInput, Alert } from 'react-native';
 import { Text, IconButton, Divider, ActivityIndicator } from 'react-native-paper';
 import useUploadCustomers from '../../hooks/useUploadCustomers';
 import { fetchCustomers } from '../../services/Customer/CustomerService';
@@ -24,10 +24,20 @@ const CustomerManagement = ({ navigation }) => {
         }
     };
 
-    // Fetch customers on mount and after a successful upload
     useEffect(() => {
         loadCustomers();
-    }, [successMessage]); // Reload when customers are successfully uploaded
+    }, []);
+
+    // Refresh the list on success or error
+    useEffect(() => {
+        if (successMessage) {
+            Alert.alert("Success", successMessage, [{ text: "OK", onPress: loadCustomers }]);
+        }
+        if (error && error.length > 0) {
+            Alert.alert("Error", error.join("\n"));
+        }
+    }, [successMessage, error]);
+
 
     // Filter customers based on search query
     const filteredCustomers = customers.filter(customer =>
@@ -60,8 +70,6 @@ const CustomerManagement = ({ navigation }) => {
 
             {/* Upload Status */}
             {uploading && <ActivityIndicator animating={true} size="small" />}
-            {error && <Text style={styles.errorText}>{error}</Text>}
-            {successMessage && <Text style={styles.successText}>{successMessage}</Text>}
 
             {/* Scrollable Content */}
             <View style={{ flex: 1 }}>

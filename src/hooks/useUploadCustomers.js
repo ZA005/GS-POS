@@ -1,7 +1,7 @@
 import { useState } from 'react';
+import { Alert } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
-import * as FileSystem from 'expo-file-system';
-import Customer from '../models/Customer';
+import { parseCSVFile } from '../utils/csvUtils';
 import { uploadCustomers } from '../services/Customer/CustomerService';
 
 const useUploadCustomers = () => {
@@ -9,14 +9,6 @@ const useUploadCustomers = () => {
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState('');
     const [parsedData, setParsedData] = useState([]);
-
-    const normalizeMobileNumber = (mobile) => {
-        let normalized = mobile.trim();
-        if (!normalized.startsWith('0')) {
-            normalized = '0' + normalized;
-        }
-        return normalized;
-    };
 
     const pickFile = async () => {
         try {
@@ -36,42 +28,32 @@ const useUploadCustomers = () => {
             }
 
             const fileUri = result.assets[0].uri;
-            const content = await FileSystem.readAsStringAsync(fileUri, { encoding: FileSystem.EncodingType.UTF8 });
+            const { data: customers, error: parseErrors } = await parseCSVFile(fileUri);
 
-            const lines = content.split('\n').filter(line => line.trim() !== '');
-            const customers = [];
-
-            for (let i = 1; i < lines.length; i++) {
-                const columns = lines[i].split(',');
-
-                if (columns.length !== 3) {
-                    console.warn(`Skipping invalid row: ${lines[i]}`);
-                    continue;
-                }
-
-                const [fullname, home_address, mobile_no] = columns.map(col => col.trim());
-
-                if (!fullname || !home_address || !mobile_no) {
-                    console.warn(`Skipping incomplete row: ${lines[i]}`);
-                    continue;
-                }
-
-                // Create Customer instance
-                const customer = new Customer(null, fullname, home_address, normalizeMobileNumber(mobile_no));
-                customers.push(customer);
+            if (parseErrors) {
+                setError(parseErrors); // Now storing multiple errors
+                setUploading(false);
+                return;
             }
 
-            if (customers.length > 0) {
-                await uploadCustomers(customers);
-                setSuccessMessage(`Successfully uploaded ${customers.length} customers.`);
-            } else {
-                setError("No valid customers to upload.");
+            if (!customers || customers.length === 0) {
+                setError(["Upload Failed: No valid customers to upload."]);
+                setUploading(false);
+                return;
+            }
+
+            const { success, error: uploadError } = await uploadCustomers(customers);
+
+            if (uploadError) {
+                setError([uploadError]); // Store as an array for consistency
+            }
+            if (success) {
+                setSuccessMessage('Customers uploaded successfully');
             }
 
             setParsedData(customers);
         } catch (err) {
-            setError('Error uploading file. Please try again.');
-            console.error(err);
+            setError(["An error occurred while uploading the file. Please try again."]);
         } finally {
             setUploading(false);
         }
@@ -79,5 +61,6 @@ const useUploadCustomers = () => {
 
     return { pickFile, uploading, error, successMessage, parsedData };
 };
+
 
 export default useUploadCustomers;
