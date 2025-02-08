@@ -1,5 +1,5 @@
-import { openDatabase, closeDatabase } from "./Database";
-import User from "../models/User";
+import { openDatabase, closeDatabase } from "../Database";
+import User from "../../models/User";
 
 
 export const getAdmin = async (username, password) => {

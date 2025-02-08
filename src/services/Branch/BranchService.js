@@ -1,5 +1,5 @@
-import { openDatabase, closeDatabase } from "./Database";
-import Branch from "../models/Branch";
+import { openDatabase, closeDatabase } from "../Database";
+import Branch from "../../models/Branch";
 
 export const addBranch = async (id, name, address) => {
     const db = await openDatabase();
