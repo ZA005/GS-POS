@@ -1,12 +1,33 @@
-import React from 'react';
-import { View, Image } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Image, Alert, BackHandler } from 'react-native';
 import { Text, Button } from 'react-native-paper';
 import styles from './setup.styles';
 
 const SetupComplete = ({ navigation }) => {
     const handleProceed = () => {
-        navigation.navigate('Dashboard');
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'Dashboard' }],
+        });
     };
+
+    useEffect(() => {
+        const backAction = () => {
+            Alert.alert(
+                "Exit App",
+                "Are you sure you want to quit the app?",
+                [
+                    { text: "No", style: "cancel" },
+                    { text: "Yes", onPress: () => BackHandler.exitApp() }
+                ]
+            );
+            return true;
+        };
+
+        const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
+
+        return () => backHandler.remove();
+    })
 
     return (
         <View style={styles.container}>

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Image, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Image, Alert, BackHandler } from 'react-native';
 import { Text, Button, TextInput } from 'react-native-paper';
 import { addBranch } from '../../services/BranchService';
 import styles from './setup.styles';
@@ -9,6 +9,24 @@ const SetupBranch = ({ navigation }) => {
     const [branchName, setName] = useState('');
     const [branchAddress, setAddress] = useState('');
     const [error, setError] = useState({ branchName: '', branchAddress: '' });
+
+    useEffect(() => {
+        const backAction = () => {
+            Alert.alert(
+                "Exit App",
+                "Are you sure you want to quit the app?",
+                [
+                    { text: "No", style: "cancel" },
+                    { text: "Yes", onPress: () => BackHandler.exitApp() }
+                ]
+            );
+            return true;
+        };
+
+        const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
+
+        return () => backHandler.remove();
+    })
 
     const handleProceed = () => {
         let valid = true;
@@ -45,7 +63,10 @@ const SetupBranch = ({ navigation }) => {
                         text: "OK",
                         onPress: () => {
                             insertBranch();
-                            navigation.navigate('SetupComplete');
+                            navigation.reset({
+                                index: 0,
+                                routes: [{ name: 'SetupComplete' }],
+                            });
                         }
                     }
                 ]
