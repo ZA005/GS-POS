@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ModalForm from './Modal/ModalForm';
-import { addProduct } from '../services/ProductService';
+import { addProduct } from '../services/Product/ProductService';
 import CustomAlert from './Alert/CustomAlert';
 import Product from '../models/Product';
 

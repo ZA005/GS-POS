@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ModalForm from './Modal/ModalForm';
 import Product from '../models/Product';
 import CustomAlert from './Alert/CustomAlert';
-import { fetchProductByID, updateProduct } from '../services/ProductService';
+import { fetchProductByID, updateProduct } from '../services/Product/ProductService';
 
 const ProductUpdate = ({ visible, onClose, productID }) => {
     const [productDescription, setProductDescription] = useState('');
