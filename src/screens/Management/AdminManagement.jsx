@@ -79,6 +79,21 @@ const AdminManagement = ({ navigation }) => {
                         <Text style={styles.optionText}>Customer Management</Text>
                     </View>
                 </TouchableOpacity>
+
+                <Divider style={styles.divider} />
+
+                <TouchableOpacity style={styles.option} onPress={() => handleNavigation('TransactionManagement')}>
+                    <View style={styles.iconTextContainer}>
+                        <IconButton
+                            icon="cash-multiple"
+                            size={30}
+                            iconColor="#00224E" // Navy color
+                        />
+                        <Text style={styles.optionText}>Transaction Management</Text>
+                    </View>
+                </TouchableOpacity>
+
+                <Divider style={styles.divider} />
             </ScrollView>
 
             {/* Branch Modal */}
