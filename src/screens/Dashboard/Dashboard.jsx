@@ -27,9 +27,11 @@ const Dashboard = () => {
                 productData.map((product) => (
                     <CardComponent
                         key={product.getID()}
-                        productName={product.getDescription()}
-                        currentPrice={formatPrice(product.getCurrentPrice())}
-                        lastUpdated={product.lastUpdated || 'N/A'}
+                        data={{
+                            ProductName: product.getDescription(),
+                            CurrentPrice: `₱ ${formatPrice(product.getCurrentPrice())}`,
+                            LastUpdated: product.lastUpdated || 'N/A'
+                        }}
                     />
                 ))
             )}

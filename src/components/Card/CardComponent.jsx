@@ -3,23 +3,19 @@ import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 import styles from './card.styles';
 
-const CardComponent = ({ productName, currentPrice, lastUpdated }) => {
+const CardComponent = ({ data }) => {
     return (
         <View style={styles.card}>
             <View style={styles.content}>
-                <View style={styles.cardSection}>
-                    <Text style={styles.label}>Product Name</Text>
-                    <Text style={styles.label}>Current Price</Text>
-                </View>
-                <View style={styles.cardSection}>
-                    <Text style={styles.productName}>{productName}</Text>
-                    <Text style={styles.currentPrice}>₱ {currentPrice}</Text>
-                </View>
-
-                <Text style={styles.label}>Last Price Updated</Text>
-                <Text style={styles.lastUpdated}>{lastUpdated}</Text>
+                {Object.entries(data).map(([key, value]) => (
+                    <View style={styles.cardSection} key={key}>
+                        <Text style={styles.label}>{key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</Text>
+                        <Text style={styles.value}>
+                            {typeof value === 'number' ? `₱ ${value}` : value}
+                        </Text>
+                    </View>
+                ))}
             </View>
-
         </View>
     );
 };

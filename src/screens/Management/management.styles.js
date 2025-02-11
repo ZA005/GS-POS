@@ -5,6 +5,7 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         padding: 16,
         backgroundColor: '#FDF6E4',
+        height: '100%',
     },
     title: {
         fontSize: 24,

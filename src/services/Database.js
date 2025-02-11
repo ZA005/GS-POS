@@ -7,7 +7,7 @@ export const openDatabase = async () => {
         const db = await SQLite.openDatabaseAsync(dbName, { useNewConnection: true });
         const [{ user_version }] = await db.getAllAsync('PRAGMA user_version;');
 
-        if (user_version < 2) {
+        if (user_version < 3) {
             await db.execAsync(`
                 PRAGMA journal_mode = WAL;
                 PRAGMA foreign_keys = ON;
@@ -46,7 +46,8 @@ export const openDatabase = async () => {
                     start_date TEXT NOT NULL,
                     start_time TEXT NOT NULL,
                     cut_off_date TEXT NOT NULL,
-                    cut_off_time TEXT NOT NULL
+                    cut_off_time TEXT NOT NULL,
+                    is_closed INTEGER NOT NULL DEFAULT 1
                 );
 
                 CREATE TABLE IF NOT EXISTS transaction_prices(
@@ -62,7 +63,13 @@ export const openDatabase = async () => {
                 SELECT 'admin','admin123','Administrator','0','1'
                 WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'admin');
 
-                PRAGMA user_version = 2;
+                PRAGMA user_version = 3;
+            `);
+        } else if (user_version === 2) {
+            // If upgrading from v2 → v3, just ALTER TABLE instead of recreating it
+            await db.execAsync(`
+                ALTER TABLE transactions ADD COLUMN is_closed INTEGER NOT NULL DEFAULT 1;
+                PRAGMA user_version = 3;
             `);
         }
         return db;

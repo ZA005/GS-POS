@@ -82,6 +82,11 @@ const UserUpdate = ({ visible, onClose, userId }) => {
     const handleToggleStatus = async () => {
         if (!userData) return;
 
+        if (userId === 1) {
+            Alert.alert("Error", "You cannot deactivate this account.");
+            return; // Prevent further execution
+        }
+
         const action = userData.is_active ? "deactivate" : "activate";
         const confirmationMessage = `Are you sure you want to ${action} ${userData.fullname}?`;
 
@@ -107,6 +112,7 @@ const UserUpdate = ({ visible, onClose, userId }) => {
             ]
         );
     };
+
 
     const handleAlertConfirm = () => {
         setAlertVisible(false);
