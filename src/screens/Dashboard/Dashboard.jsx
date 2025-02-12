@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { View, ScrollView } from 'react-native';
 import { Text, BottomNavigation } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import CardComponent from '../../components/Card/CardComponent';
+import ProductCard from '../../components/Card/ProductCard';
 import Management from '../Management/Management';
 import useFetchProducts from '../../hooks/useFetchProducts';
 import styles from './dashboard.styles';
@@ -25,13 +25,11 @@ const Dashboard = () => {
                 <Text style={styles.noDataText}>No Product to be displayed.</Text>
             ) : (
                 productData.map((product) => (
-                    <CardComponent
+                    <ProductCard
                         key={product.getID()}
-                        data={{
-                            ProductName: product.getDescription(),
-                            CurrentPrice: `₱ ${formatPrice(product.getCurrentPrice())}`,
-                            LastUpdated: product.lastUpdated || 'N/A'
-                        }}
+                        productName={product.getDescription()}
+                        currentPrice={formatPrice(product.getCurrentPrice())}
+                        lastUpdated={product.lastUpdated || 'N/A'}
                     />
                 ))
             )}
