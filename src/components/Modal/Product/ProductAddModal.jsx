@@ -10,6 +10,8 @@ const ProductAdd = ({ visible, onClose }) => {
     const [tankNumber, setTankNumber] = useState('');
     const [currentPrice, setCurrentPrice] = useState('');
     const [alertVisible, setAlertVisible] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertType, setAlertType] = useState('success');
 
     const formatPrice = (price) => {
         const numericPrice = parseFloat(price);
@@ -19,21 +21,31 @@ const ProductAdd = ({ visible, onClose }) => {
     const handleSubmit = async () => {
         try {
             const formattedPrice = formatPrice(currentPrice);
-            // console.log('PRICE', formattedPrice);
             const newProduct = new Product(productID, productDescription, tankNumber, formattedPrice);
-            await addProduct(newProduct);
-            // console.log("Product added:", { productDescription, tankNumber, currentPrice });
+            const success = await addProduct(newProduct);
 
+            if (!success) {
+                setAlertMessage("A product with this description or tank number already exists.");
+                setAlertType("error");
+            } else {
+                setAlertMessage("Product successfully added!");
+                setAlertType("success");
 
-            setProductDescription('');
-            setTankNumber('');
-            setCurrentPrice('');
+                setProductID('');
+                setProductDescription('');
+                setTankNumber('');
+                setCurrentPrice('');
+            }
 
             setAlertVisible(true);
         } catch (error) {
             console.error("Error adding product:", error);
+            setAlertMessage("An unexpected error occurred. Please try again.");
+            setAlertType("error");
+            setAlertVisible(true);
         }
     };
+
 
     const handleProductIDChange = (text) => {
         if (text.length <= 2) {
@@ -99,9 +111,10 @@ const ProductAdd = ({ visible, onClose }) => {
             <CustomAlert
                 visible={alertVisible}
                 onConfirm={handleAlertConfirm}
-                action="add"
-                entity="product"
+                message={alertMessage}
+                type={alertType}
             />
+
         </>
 
     );

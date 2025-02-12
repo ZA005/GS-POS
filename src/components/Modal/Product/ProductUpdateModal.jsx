@@ -9,6 +9,8 @@ const ProductUpdate = ({ visible, onClose, productID }) => {
     const [tankNumber, setTankNumber] = useState('');
     const [currentPrice, setCurrentPrice] = useState('');
     const [alertVisible, setAlertVisible] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertType, setAlertType] = useState('success');
 
     useEffect(() => {
         const loadProduct = async () => {
@@ -39,8 +41,15 @@ const ProductUpdate = ({ visible, onClose, productID }) => {
         try {
             const formattedPrice = formatPrice(currentPrice);
             const updatedProduct = new Product(productID, productDescription, tankNumber, formattedPrice);
-            await updateProduct(updatedProduct);
+            const success = await updateProduct(updatedProduct);
 
+            if (!success) {
+                setAlertMessage("A product with this description or tank number already exists.");
+                setAlertType("error");
+            } else {
+                alertMessage(`${updatedProduct._description} successfully updated.`)
+                setAlertType("success");
+            }
             setProductDescription('');
             setTankNumber('');
             setCurrentPrice('');
@@ -118,8 +127,8 @@ const ProductUpdate = ({ visible, onClose, productID }) => {
             <CustomAlert
                 visible={alertVisible}
                 onConfirm={handleAlertConfirm}
-                action="update"
-                entity="Product"
+                message={alertMessage}
+                type={alertType}
             />
         </>
 

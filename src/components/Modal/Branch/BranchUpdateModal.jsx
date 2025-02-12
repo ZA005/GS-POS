@@ -9,6 +9,8 @@ const BranchUpdate = ({ visible, onClose }) => {
     const [branchName, setBranchName] = useState('');
     const [branchAddress, setBranchAddress] = useState('');
     const [alertVisible, setAlertVisible] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertType, setAlertType] = useState('success');
 
     useEffect(() => {
         if (visible) {
@@ -29,8 +31,15 @@ const BranchUpdate = ({ visible, onClose }) => {
 
         try {
             const updatedBranch = new Branch(branchID, branchName, branchAddress);
-            await updateBranch(updatedBranch);
-
+            const success = await updateBranch(updatedBranch);
+            console.log("RESULT", success);
+            if (!success) {
+                setAlertMessage("Theres an error updating the branch.");
+                setAlertType("error");
+            } else {
+                setAlertMessage("Branch updated successfully.");
+                setAlertType("success");
+            }
             setBranchID('')
             setBranchName('')
             setBranchAddress('')
@@ -88,8 +97,8 @@ const BranchUpdate = ({ visible, onClose }) => {
             <CustomAlert
                 visible={alertVisible}
                 onConfirm={() => setAlertVisible(false)}
-                action="update"
-                entity="Branch"
+                message={alertMessage}
+                type={alertType}
             />
         </>
 
