@@ -1,10 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Alert } from "react-native";
-import { updateMultipleProductPrices } from "../services/Product/ProductService";
-import Product from "../models/Product";
+import { updateMultipleProductPrices } from "../../services/Product/ProductService";
+import useStartTransaction from "../Transaction/useStartTransaction";
+import Product from "../../models/Product";
 
-const usePriceUpdater = (productData, fetchProducts, setModalVisible) => {
+const usePriceUpdater = (productData, fetchProducts, setModalVisible, transactionDate, transactionTime) => {
     const [updatedProducts, setUpdatedProducts] = useState({});
+    const [transactionDetails, setTransactionDetails] = useState({ date: "", time: "" });
+
+    const { initiateTransaction, transaction, loading } = useStartTransaction();
+
+    useEffect(() => {
+        if (transactionDate && transactionTime) {
+            setTransactionDetails((prev) => {
+                if (prev.date === transactionDate && prev.time === transactionTime) {
+                    return prev;
+                }
+                return { date: transactionDate, time: transactionTime };
+            });
+        }
+    }, [transactionDate, transactionTime]);
+
+    const logTransactionDetails = () => {
+        console.log("Transaction Date:", transactionDetails.date);
+        console.log("Transaction Time:", transactionDetails.time);
+    };
 
     const handlePriceChange = (productId, newPrice) => {
         setUpdatedProducts((prev) => ({
@@ -14,6 +34,8 @@ const usePriceUpdater = (productData, fetchProducts, setModalVisible) => {
     };
 
     const confirmPriceUpdate = async () => {
+        logTransactionDetails();
+
         const productsToUpdate = productData
             .filter((product) => updatedProducts[product.getID()] !== undefined)
             .map((product) =>
@@ -33,7 +55,7 @@ const usePriceUpdater = (productData, fetchProducts, setModalVisible) => {
 
         Alert.alert(
             "Confirm Prices",
-            "By confirming, you will start a new transaction and update the product price.",
+            "By confirming, you will update the product prices and start a new transaction.",
             [
                 { text: "Cancel", style: "cancel" },
                 {
@@ -41,10 +63,18 @@ const usePriceUpdater = (productData, fetchProducts, setModalVisible) => {
                     onPress: async () => {
                         try {
                             await updateMultipleProductPrices(productsToUpdate);
+
                             Alert.alert("Success", "The product prices have been updated successfully.");
                             setUpdatedProducts({});
                             setModalVisible(false);
                             fetchProducts();
+
+                            // Start a new transaction AFTER updating prices
+                            await initiateTransaction({
+                                startDate: transactionDetails.date,
+                                startTime: transactionDetails.time,
+                            });
+
                         } catch (error) {
                             Alert.alert("Error", "Oops! We couldn't update the product prices. Please try again.");
                             console.error("Price update error:", error);
@@ -57,7 +87,7 @@ const usePriceUpdater = (productData, fetchProducts, setModalVisible) => {
 
     const clearUpdates = () => setUpdatedProducts({});
 
-    return { updatedProducts, handlePriceChange, confirmPriceUpdate, clearUpdates };
+    return { updatedProducts, handlePriceChange, confirmPriceUpdate, clearUpdates, transactionTime, loading };
 };
 
 export default usePriceUpdater;

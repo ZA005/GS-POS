@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { fetchAllProducts } from '../services/Product/ProductService';
-import Product from "../models/Product";
+import { fetchAllProducts } from '../../services/Product/ProductService';
+import Product from "../../models/Product";
 
-const useFetchProducts = (activeTab) => {
+const useFetchProducts = () => {
     const [productData, setProductData] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const fetchProducts = async () => {
         try {
@@ -21,13 +21,7 @@ const useFetchProducts = (activeTab) => {
         }
     };
 
-    useEffect(() => {
-        if (activeTab === 0) {
-            fetchProducts(); // Load products on mount
-        }
-    }, [activeTab]);
-
-    return { productData, loading, fetchProducts }; // Return fetchProducts so it can be used in TransactionManagement
+    return { productData, loading, fetchProducts }; // Remove `activeTab` dependency
 };
 
 export default useFetchProducts;
