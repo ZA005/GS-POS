@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import { View, ScrollView, TextInput, Alert } from 'react-native';
-import { Text, IconButton, Divider, Modal, Card, ActivityIndicator, Button } from 'react-native-paper';
-import useFetchProducts from "../../../hooks/useFetchProducts";
-import styles from './transaction.styles';
-
-const formatPrice = (price) => parseFloat(price).toFixed(2);
+import { View, ScrollView, TextInput, Alert } from "react-native";
+import { Text, IconButton, Modal, Button } from "react-native-paper";
+import useFetchProducts from "../../../hooks/useFetchProducts"
+import usePriceUpdater from "../../../hooks/usePriceUpdater";
+import ProductList from "./ProductList";
+import PriceUpdateModal from "./PriceUpdateModal";
+import styles from "./transaction.styles";
 
 const TransactionManagement = ({ navigation }) => {
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchQuery, setSearchQuery] = useState("");
     const [viewInactive, setViewInactive] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
 
-    const { productData, loading } = useFetchProducts(0);
+    const { productData, loading, fetchProducts } = useFetchProducts(0);
+    const { updatedProducts, handlePriceChange, confirmPriceUpdate, clearUpdates } = usePriceUpdater(productData, fetchProducts, setModalVisible);
 
     const handleUpdatePrices = () => {
         Alert.alert(
@@ -19,52 +21,15 @@ const TransactionManagement = ({ navigation }) => {
             "You need to update the prices of the product to begin a new transaction.",
             [
                 { text: "Cancel", style: "cancel" },
-                {
-                    text: "Update Prices",
-                    onPress: () => setModalVisible(true)
-                }
+                { text: "Update Prices", onPress: () => setModalVisible(true) }
             ]
         );
     };
 
-    const renderProducts = () => {
-        if (loading) {
-            return <ActivityIndicator animating={true} size="large" />;
-        }
-
-        if (productData.length === 0) {
-            return <Text style={{ textAlign: "center", marginTop: 20 }}>No products available.</Text>;
-        }
-
-        return productData.map((product, index) => (
-            <View key={index} style={styles.productContainer}>
-                <Text style={styles.productName}>{product.getDescription()}</Text>
-                <Text style={styles.productPrice}>Current Price: ₱{formatPrice(product.getCurrentPrice())}</Text>
-                <TextInput
-                    style={styles.priceInput}
-                    defaultValue={formatPrice(product.getCurrentPrice())}
-                    keyboardType="numeric"
-                    placeholder="Enter new price"
-                    onChangeText={(text) => {
-                        // Handle price update logic
-                        product.updatePrice(parseFloat(text) || 0);
-                    }}
-                />
-            </View>
-        ));
-    };
-
-
-
     return (
         <View style={styles.container}>
             <View style={styles.titleContainer}>
-                <IconButton
-                    icon="arrow-left"
-                    size={30}
-                    onPress={() => navigation.goBack()}
-                    style={styles.backButton}
-                />
+                <IconButton icon="arrow-left" size={30} onPress={() => navigation.goBack()} style={styles.backButton} />
                 <Text style={styles.title}>Transaction Management</Text>
             </View>
 
@@ -78,57 +43,36 @@ const TransactionManagement = ({ navigation }) => {
                 />
             </View>
 
+            {/* Product List */}
             <View style={{ flex: 1 }}>
-                <ScrollView>
-                    {/* Product List goes here if needed */}
-                </ScrollView>
+
             </View>
 
+            {/* Footer */}
             <View style={styles.footer}>
-                {/* Add User Button */}
                 <View style={styles.buttonContainer}>
-                    <IconButton
-                        icon="plus"
-                        size={24}
-                        onPress={handleUpdatePrices}
-                        style={styles.iconButton}
-                        iconColor="white"
-                    />
+                    <IconButton icon="plus" size={24} onPress={handleUpdatePrices} style={styles.iconButton} iconColor="white" />
                     <Text style={styles.buttonLabel}>Start Transaction</Text>
                 </View>
 
-                {/* Toggle Active/Inactive Users Button */}
                 <View style={styles.buttonContainer}>
-                    <IconButton
-                        icon="account-check"
-                        size={24}
-                        onPress={() => { }}
-                        style={styles.iconButton}
-                        iconColor="white"
-                    />
+                    <IconButton icon="account-check" size={24} onPress={() => { }} style={styles.iconButton} iconColor="white" />
                     <Text style={styles.buttonLabel}>{viewInactive ? "View Current T" : "View Logs"}</Text>
                 </View>
             </View>
 
-            {/* Modal for displaying products */}
-            <Modal
+            {/* Price Update Modal */}
+            <PriceUpdateModal
                 visible={modalVisible}
-                onDismiss={() => setModalVisible(false)}
-                contentContainerStyle={styles.modalContainer}
-            >
-                <Text style={styles.modalTitle}>Update Product Prices</Text>
-                <Divider style={styles.modalDivider} />
-                <ScrollView style={styles.modalContent}>
-                    {renderProducts()}
-                </ScrollView>
-                <Button
-                    mode="contained"
-                    onPress={() => setModalVisible(false)}
-                    style={styles.modalButton}
-                >
-                    Close
-                </Button>
-            </Modal>
+                products={productData}
+                updatedProducts={updatedProducts}
+                onConfirm={confirmPriceUpdate}
+                onClose={() => {
+                    clearUpdates();
+                    setModalVisible(false);
+                }}
+                onPriceChange={handlePriceChange}
+            />
         </View>
     );
 };

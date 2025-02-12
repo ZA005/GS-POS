@@ -79,10 +79,11 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     modalContent: {
-        maxHeight: 300,
+        maxHeight: 400,
     },
     modalButton: {
         marginTop: 15,
+        borderRadius: 5
     },
     productContainer: {
         padding: 10,
