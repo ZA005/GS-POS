@@ -8,11 +8,11 @@ import AdminLogin from '../screens/Setup/AdminLogin';
 import SetupBranch from '../screens/Setup/SetupBranch';
 import SetupComplete from '../screens/Setup/Setup_Complete';
 import Dashboard from '../screens/Dashboard/Dashboard';
-import AdminManagement from '../screens/Management/AdminManagement';
-import UserManagement from '../screens/Management/UserManagement';
-import ProductManagement from '../screens/Management/ProductManagement';
-import CustomerManagement from '../screens/Management/CustomerManagement';
-import TransactionManagement from '../screens/Management/TransactionManagement';
+import AdminManagement from '../screens/Management/Admin/AdminManagement';
+import UserManagement from '../screens/Management/User/UserManagement';
+import ProductManagement from '../screens/Management/Product/ProductManagement';
+import CustomerManagement from '../screens/Management/Customer/CustomerManagement';
+import TransactionManagement from '../screens/Management/Transaction/TransactionManagement';
 import { fetchBranch } from '../services/Branch/BranchService';
 
 const Stack = createStackNavigator();
