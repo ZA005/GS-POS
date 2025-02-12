@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, ScrollView, TextInput } from 'react-native';
 import { Text, IconButton, Divider } from 'react-native-paper';
-import ProductUpdate from '../../components/Modal/Product/ProductUpdateModal';
-import ProductAdd from '../../components/Modal/Product/ProductAddModal';
-import { fetchAllProducts } from '../../services/Product/ProductService';
-import styles from './management.styles';
+import ProductUpdate from '../../../components/Modal/Product/ProductUpdateModal';
+import ProductAdd from '../../../components/Modal/Product/ProductAddModal';
+import { fetchAllProducts } from '../../../services/Product/ProductService';
+import styles from '../management.styles';
 
 const ProductManagement = ({ navigation }) => {
     const [productToEdit, setProductToEdit] = useState(null);

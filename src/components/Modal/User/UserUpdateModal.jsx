@@ -13,7 +13,8 @@ const UserUpdate = ({ visible, onClose, userId }) => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [alertVisible, setAlertVisible] = useState(false);
-
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertType, setAlertType] = useState('success');
 
     useEffect(() => {
         const loadUser = async () => {
@@ -66,7 +67,15 @@ const UserUpdate = ({ visible, onClose, userId }) => {
         try {
             const userTypeInt = convertUserTypeToInt(userType);
             const updatedUser = new User(userId, username, password, fullName, userTypeInt, userData.is_active);
-            await updateUser(updatedUser)
+            const success = await updateUser(updatedUser)
+
+            if (!success) {
+                setAlertMessage("A User with this username or name already exists.");
+                setAlertType("error");
+            } else {
+                setAlertMessage("User successfully added!");
+                setAlertType("success");
+            }
             setAlertVisible(true);
         } catch (e) {
             console.error("Error updating user:", e);
@@ -179,8 +188,8 @@ const UserUpdate = ({ visible, onClose, userId }) => {
             <CustomAlert
                 visible={alertVisible}
                 onConfirm={handleAlertConfirm}
-                action="update"
-                entity="User"
+                message={alertMessage}
+                type={alertType}
             />
         </>
 

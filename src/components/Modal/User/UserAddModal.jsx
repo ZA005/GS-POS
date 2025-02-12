@@ -12,6 +12,8 @@ const UserAdd = ({ visible, onClose }) => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [alertVisible, setAlertVisible] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertType, setAlertType] = useState('success');
 
     const convertUserTypeToInt = (type) => {
         switch (type) {
@@ -38,7 +40,15 @@ const UserAdd = ({ visible, onClose }) => {
                 throw new Error('Invalid User Type');
             }
             const newUser = new User(null, username, password, fullName, userTypeInt, 1);
-            await addUser(newUser);
+            const success = await addUser(newUser);
+
+            if (!success) {
+                setAlertMessage("A User with this username or name already exists.");
+                setAlertType("error");
+            } else {
+                setAlertMessage("User successfully added!");
+                setAlertType("success");
+            }
         } catch (e) {
             console.error('Error adding user:', e);
         }
@@ -114,8 +124,8 @@ const UserAdd = ({ visible, onClose }) => {
             <CustomAlert
                 visible={alertVisible}
                 onConfirm={handleAlertConfirm}
-                action="add"
-                entity="User"
+                message={alertMessage}
+                type={alertType}
             />
         </>
 
