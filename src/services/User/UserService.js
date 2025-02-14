@@ -132,19 +132,23 @@ export const addUser = async (user) => {
 
     try {
         const result = await db.getFirstAsync(
-            'SELECT COUNT(*) AS count FROM users WHERE username = ?, fullname = ?',
+            'SELECT COUNT(*) AS count FROM users WHERE username = ? AND fullname = ?',
             [user.getUsername(), user.getFullname()]
         );
+        console.log("PASSED")
         if (result.count > 0) {
             console.log("User already exists!");
             return false
         }
+        console.log("PASSED 1")
         await db.runAsync(
             'INSERT INTO users (username,password,fullname, user_type, is_active) VALUES (?,?,?,?,1)',
             [user.getUsername(), user.getPassword(), user.getFullname(), user.getUserType()]
         );
+        console.log("PASSED 2")
         return true;
     } catch (e) {
+        console.error("ERROR:", e)
         throw e;
     } finally {
         if (db) closeDatabase(db);

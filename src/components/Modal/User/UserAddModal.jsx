@@ -51,6 +51,7 @@ const UserAdd = ({ visible, onClose }) => {
             }
         } catch (e) {
             console.error('Error adding user:', e);
+            throw e;
         }
         setFullName('');
         setUserType('');
