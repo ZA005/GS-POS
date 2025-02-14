@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { fetchCustomers } from '../services/Customer/CustomerService';
+import { fetchCustomers } from '../../services/Customer/CustomerService';
 
 const useFetchCustomers = () => {
     const [customers, setCustomers] = useState([]);

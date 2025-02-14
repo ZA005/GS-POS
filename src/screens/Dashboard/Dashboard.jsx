@@ -4,7 +4,7 @@ import { Text, BottomNavigation } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import ProductCard from '../../components/Card/ProductCard';
 import Management from '../Management/Management';
-import useFetchProducts from '../../hooks/useFetchProducts';
+import useFetchProducts from '../../hooks/Product/useFetchProducts';
 import styles from './dashboard.styles';
 
 const formatPrice = (price) => parseFloat(price).toFixed(2);
@@ -12,7 +12,7 @@ const formatPrice = (price) => parseFloat(price).toFixed(2);
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState(0);
     const navigation = useNavigation();
-    const { productData, loading } = useFetchProducts(activeTab);
+    const { productData, loading } = useFetchProducts();
 
     const renderDashboard = useCallback(() => (
         <ScrollView contentContainerStyle={styles.container} stickyHeaderIndices={[0]}>

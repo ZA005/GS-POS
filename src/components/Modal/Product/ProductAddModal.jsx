@@ -62,14 +62,14 @@ const ProductAdd = ({ visible, onClose }) => {
         {
             mode: 'outlined',
             label: 'Product ID',
-            value: productID,
+            value: productID.toUpperCase(),
             onChangeText: handleProductIDChange,
             validation: (value) => !value.trim() ? "ProductID is required" : null
         },
         {
             mode: 'outlined',
             label: 'Product Name',
-            value: productDescription,
+            value: productDescription.toUpperCase(),
             onChangeText: setProductDescription,
             validation: (value) => !value.trim() ? "Product Name is required" : null
         },

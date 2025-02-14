@@ -79,10 +79,11 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     modalContent: {
-        maxHeight: 300,
+        maxHeight: 400,
     },
     modalButton: {
         marginTop: 15,
+        borderRadius: 5
     },
     productContainer: {
         padding: 10,
@@ -100,13 +101,46 @@ const styles = StyleSheet.create({
     },
 
 
+    productItem: {
+        backgroundColor: '#FFF',
+        padding: 12,
+        marginVertical: 6,
+        borderRadius: 6,
+    },
     productName: {
         fontSize: 16,
         fontWeight: 'bold',
+        color: '#00224E',
     },
     productPrice: {
+        fontSize: 14,
         color: '#555',
+        marginTop: 4,
     },
+    transactionContainer: {
+        backgroundColor: '#FFF',
+        padding: 15,
+        borderRadius: 8,
+        marginBottom: 15,
+    },
+    transactionHeader: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 5,
+        color: '#00224E',
+    },
+    transactionDivider: {
+        marginVertical: 5,
+    },
+    transactionText: {
+        fontSize: 16,
+        color: '#333',
+        marginTop: 3,
+    },
+    noTransactionText: {
+        justifyContent: 'center',
+        textAlign: 'center'
+    }
 });
 
 export default styles;

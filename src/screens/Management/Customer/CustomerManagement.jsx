@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, ScrollView, TextInput, Alert } from 'react-native';
 import { Text, IconButton, Divider, ActivityIndicator } from 'react-native-paper';
-import useUploadCustomers from '../../../hooks/useUploadCustomers';
+import useUploadCustomers from '../../../hooks/Customer/useUploadCustomers';
 import { fetchCustomers } from '../../../services/Customer/CustomerService';
 import styles from '../management.styles';
 
