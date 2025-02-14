@@ -4,7 +4,7 @@ import { updateMultipleProductPrices } from "../../services/Product/ProductServi
 import useStartTransaction from "../Transaction/useStartTransaction";
 import Product from "../../models/Product";
 
-const usePriceUpdater = (productData, fetchProducts, setModalVisible, transactionDate, transactionTime) => {
+const usePriceUpdater = (productData, fetchProducts, setModalVisible, transactionDate, transactionTime, refresh) => {
     const [updatedProducts, setUpdatedProducts] = useState({});
     const [transactionDetails, setTransactionDetails] = useState({ date: "", time: "" });
 
@@ -64,16 +64,31 @@ const usePriceUpdater = (productData, fetchProducts, setModalVisible, transactio
                         try {
                             await updateMultipleProductPrices(productsToUpdate);
 
-                            Alert.alert("Success", "The product prices have been updated successfully.");
-                            setUpdatedProducts({});
-                            setModalVisible(false);
-                            fetchProducts();
+                            Alert.alert(
+                                "Success",
+                                "The product prices have been updated successfully.",
+                                [
+                                    {
+                                        text: "OK",
+                                        onPress: async () => {
+                                            setUpdatedProducts({});
+                                            setModalVisible(false);
 
-                            // Start a new transaction AFTER updating prices
-                            await initiateTransaction({
-                                startDate: transactionDetails.date,
-                                startTime: transactionDetails.time,
-                            });
+                                            // Start a new transaction AFTER updating prices
+                                            await initiateTransaction({
+                                                startDate: transactionDetails.date,
+                                                startTime: transactionDetails.time,
+                                            });
+
+                                            // Refresh all required data
+                                            await fetchProducts();
+                                            if (refresh) {
+                                                await refresh();
+                                            }
+                                        }
+                                    }
+                                ]
+                            );
 
                         } catch (error) {
                             Alert.alert("Error", "Oops! We couldn't update the product prices. Please try again.");

@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { fetchAllProducts } from '../../services/Product/ProductService';
 import Product from "../../models/Product";
 
 const useFetchProducts = () => {
     const [productData, setProductData] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
-    const fetchProducts = async () => {
+    const fetchProducts = useCallback(async () => {
         try {
             setLoading(true);
             const products = await fetchAllProducts();
@@ -19,9 +19,13 @@ const useFetchProducts = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
-    return { productData, loading, fetchProducts }; // Remove `activeTab` dependency
+    useEffect(() => {
+        fetchProducts();
+    }, [fetchProducts]);
+
+    return { productData, loading, fetchProducts };
 };
 
 export default useFetchProducts;
