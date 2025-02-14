@@ -12,7 +12,7 @@ const formatPrice = (price) => parseFloat(price).toFixed(2);
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState(0);
     const navigation = useNavigation();
-    const { productData, loading } = useFetchProducts(activeTab);
+    const { productData, loading } = useFetchProducts();
 
     const renderDashboard = useCallback(() => (
         <ScrollView contentContainerStyle={styles.container} stickyHeaderIndices={[0]}>
