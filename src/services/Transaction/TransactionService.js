@@ -20,9 +20,9 @@ export const cutOffTransaction = async (transaction) => {
     const db = await openDatabase();
     try {
         await db.runAsync(
-            `UPDATE transaction
+            `UPDATE [transactions]
             SET cut_off_date = ?, cut_off_time = ?, is_closed = 0
-            WHERE id = ?`,
+            WHERE transaction_id = ?`,
             [transaction.getCutOffDate(), transaction.getCutOffTime(), transaction.getId()]
         );
 
